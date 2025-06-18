@@ -11,7 +11,7 @@ const path = require("path");
 const paths = {
   baseDir: "dist",
   scss: "scss/**/*.scss",
-  cssOutput: "dist/css",
+  cssOutput: "dist/assets/css",
   html: "dist/**/*.html",
 };
 
@@ -20,12 +20,10 @@ function compileSass() {
   return (
     gulp
       .src(paths.scss, { allowEmpty: true })
-      .pipe(sourcemaps.init())
       .pipe(sass().on("error", sass.logError))
       .pipe(autoprefixer({ cascade: false }))
       // .pipe(cleanCSS())
       // .pipe(rename({ suffix: ".min" }))
-      .pipe(sourcemaps.write("."))
       .pipe(gulp.dest(paths.cssOutput))
       .pipe(browserSync.stream())
   );
@@ -59,7 +57,7 @@ function serve() {
 
   const watcher = gulp.watch(paths.scss, compileSass);
 
-  // 新增刪除 SCSS 對應 CSS 的邏輯
+  // 刪除 SCSS 對應 CSS 的邏輯
   watcher.on("unlink", function (filePath) {
     deleteCssFile(filePath);
   });
